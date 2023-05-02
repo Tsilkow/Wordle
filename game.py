@@ -2,7 +2,7 @@ import string
 from enum import Enum
 from colorama import Fore, Back, Style
 from word_bank import WordBank, LetterStatus
-from solver import best_move
+from solver import random_matching_move, best_letter_matching_move
 
 
 GAME_LENGTH = 6
@@ -109,4 +109,5 @@ if __name__ == '__main__':
     word_bank = WordBank()
     game = Game(word_bank)
     # game.play(input_human_guess)
-    game.play(best_move)
+    # game.play(random_matching_move)
+    game.play(best_letter_matching_move)
