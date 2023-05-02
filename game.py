@@ -2,6 +2,7 @@ import string
 from enum import Enum
 from colorama import Fore, Back, Style
 from word_bank import WordBank, LetterStatus
+from solver import best_move
 
 
 GAME_LENGTH = 6
@@ -29,7 +30,6 @@ class Game:
         self._solution = self._word_bank.get_word()
         self._guesses = []
         self._history = []
-        self._matching = None
         self.letters_status = {letter:LetterStatus.Untried
                                for letter in list(string.ascii_lowercase)}
         self.status = GameStatus.Progressing
@@ -76,17 +76,6 @@ class Game:
 
         return self.status
 
-    def _input_guess(self):
-        """Loop for prompting player for a guess until it's valid"""
-        while True:
-            guess = input('>')
-            if len(guess) != 5: continue
-            for l in guess:
-                if l not in string.ascii_lowercase: continue
-            if not self._word_bank.verify_word(guess): continue
-            break
-        return guess
-
     def _print_history(self):
         """Colorful visual print of prior guesses and their evaluations"""
         for guess, score in zip(self._guesses, self._history):
@@ -94,26 +83,30 @@ class Game:
                 print(f'{LetterStatusColors[s]} {l} {Style.RESET_ALL}', end='')
             print('')
 
-    def _update_matching(self):
-        """Update of words present in the word bank that can be the solution"""
-        matching_new = self._word_bank.words_matching(self._guesses[-1], self._history[-1])
-        if self._matching is None: self._matching = matching_new
-        else: self._matching = list(set(matching_new).intersection(self._matching))
-        print(sorted(self._matching))
-
-    def play(self):
+    def play(self, player):
         """Method to call, to complete a playthrough"""
+        memory = None
         while self.status == GameStatus.Progressing:
-            guess = self._input_guess()
+            guess, memory = player(self._word_bank, self._guesses, self._history, memory)
             self._process_guess(guess)
             self._print_history()
-            self._update_matching()
         return self.status
+
+    
+def input_human_guess(word_bank, guesses, scores, memory):
+    """Loop for prompting human player for a guess until it's valid"""
+    while True:
+        guess = input('>')
+        if len(guess) != 5: continue
+        for l in guess:
+            if l not in string.ascii_lowercase: continue
+        if not word_bank.verify_word(guess): continue
+        break
+    return guess, memory
 
 
 if __name__ == '__main__':
     word_bank = WordBank()
     game = Game(word_bank)
-    game.play()
-
-    
+    # game.play(input_human_guess)
+    game.play(best_move)
