@@ -1,5 +1,5 @@
 # Wordle
-Implementation of [NYT word game](https://www.nytimes.com/games/wordle/index.html), originally created by Josh Wardle along with some solving algorithms. Words in 'words' were taken from [tabatkins' repository](https://github.com/tabatkins/wordle-list).
+Implementation of [New York Times' word game](https://www.nytimes.com/games/wordle/index.html), originally created by Josh Wardle, along with a few solving algorithms.
 
 ## Results
 Algorithms used for solving:  
