@@ -13,6 +13,6 @@ python game.py -s <solution>
 
 To solve using one of the algorithms (defined in solver.py):
 ```bash
-python game.py -p <algoritm>
+python game.py -p <algorithm>
 ```
 
