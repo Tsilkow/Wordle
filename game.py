@@ -1,8 +1,9 @@
 import string
+import argparse
 from enum import Enum
 from colorama import Fore, Back, Style
 from word_bank import WordBank, LetterStatus
-from solver import random_matching_move, best_letter_matching_move
+from solver import is_feasible, get_human_guess, get_random_guess, get_best_letter_guess
 
 
 GAME_LENGTH = 6
@@ -25,9 +26,18 @@ class Game:
 
     :word_bank: WordBank instance with words to be used in the game
     """
-    def __init__(self, word_bank):
+    def __init__(self, word_bank, solution=None, laconic=False):
         self._word_bank = word_bank
-        self._solution = self._word_bank.get_word()
+        if solution is not None:
+            if not is_feasible(solution, self._word_bank):
+                print(f'!Warning! Word {solution} is not valid (either '
+                      f'because it\'s not 5-letter, not lowercase or not in '
+                      f'word bank). Continuing with random word from word bank.')
+                self._solution = None
+            else:
+                self._solution = solution
+        if solution is None: self._solution = self._word_bank.get_word()
+        self._laconic = laconic
         self._guesses = []
         self._history = []
         self.letters_status = {letter:LetterStatus.Untried
@@ -87,27 +97,30 @@ class Game:
         """Method to call, to complete a playthrough"""
         memory = None
         while self.status == GameStatus.Progressing:
-            guess, memory = player(self._word_bank, self._guesses, self._history, memory)
+            guess, memory = player(
+                self._word_bank, self._guesses, self._history, memory, self._laconic)
             self._process_guess(guess)
-            self._print_history()
+            if not self._laconic: self._print_history()
         return self.status
-
-    
-def input_human_guess(word_bank, guesses, scores, memory):
-    """Loop for prompting human player for a guess until it's valid"""
-    while True:
-        guess = input('>')
-        if len(guess) != 5: continue
-        for l in guess:
-            if l not in string.ascii_lowercase: continue
-        if not word_bank.verify_word(guess): continue
-        break
-    return guess, memory
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-s', '--solution', action='store',
+        help='solution to the puzzle')
+    parser.add_argument(
+        '-p', '--player', action='store',
+        help='player of the puzzle (descriptions in solver.py): \'human\', \'random\', \'best_letter\'')
+    parser.add_argument(
+        '-l', '--laconic', action='store_true',
+        help='flag for supressing printing game status; recommended for bulk solver testing')
+    args = parser.parse_args()
+    if args.player is None: player = get_human_guess
+    elif args.player == 'human': player = get_human_guess
+    elif args.player == 'random': player =  get_random_guess
+    elif args.player == 'best_letter': player = get_best_letter_guess
+    
     word_bank = WordBank()
-    game = Game(word_bank)
-    # game.play(input_human_guess)
-    # game.play(random_matching_move)
-    game.play(best_letter_matching_move)
+    game = Game(word_bank, solution=args.solution, laconic=args.laconic)
+    game.play(player)

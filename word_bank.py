@@ -29,13 +29,15 @@ class WordBank:
         """
         return (word in self._words)
 
-    def words_matching(self, word, letters_status):
+    def words_matching(self, word, letters_status, candidates=None):
         """
         Returns words that are possible solution based on scoring of one, given word
 
         :word: word used in scoring
         :letters_status: scoring given to the word
+        :candidates: words to consider as possible solutions; if None, considers all words; defaults to None
         """
+        if candidates is None: candidates = self._words
         result = []
         positive_regexs = []
         negative_regexs = []
@@ -49,7 +51,7 @@ class WordBank:
             elif s == LetterStatus.Absent:
                 negative_regexs.append(l)
         
-        for w in self._words:
+        for w in candidates:
             allowed_word = True
             for r in positive_regexs:
                 if not re.search(r, w):
