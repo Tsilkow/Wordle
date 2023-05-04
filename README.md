@@ -1,4 +1,4 @@
-# Wordle Solver
+# Wordle
 Implementation of [NYT word game](https://www.nytimes.com/games/wordle/index.html), originally created by Josh Wardle along with some solving algorithms. Words in 'words' were taken from [tabatkins' repository](https://github.com/tabatkins/wordle-list).  
 
 ## How to run
