@@ -6,9 +6,9 @@ from word_bank import WordBank, LetterStatus
 best_opener = 'crane'
 
 
-def is_feasible(word, word_bank):
+def is_valid(word, word_bank):
     """
-    Checks if word is feasible: 5-letter, all lowercase and in word bank
+    Checks if word is valid: 5-letter, all lowercase and in word bank
 
     :word: word to confirm
     :word_bank: word_bank the word is supposed to be in
@@ -24,7 +24,7 @@ def get_human_guess(word_bank, guesses, scores, memory, laconic=False):
     """Loop for prompting human player for a guess until it's valid"""
     while True:
         guess = input('>')
-        if is_feasible(guess, word_bank): break
+        if is_valid(guess, word_bank): break
     return guess, memory
 
 

@@ -9,9 +9,9 @@ class WordBank:
     """
     Structure for loading, storing and searching through words used in the game
 
-    :filename: filename of file with words that will be loaded; deafults to 'words'
+    :filename: filename of file with words that will be loaded
     """
-    def __init__(self, filename='words'):
+    def __init__(self, filename):
         self._words = []
         with open(filename, 'r') as f:
             for word in f.readlines():
@@ -20,6 +20,10 @@ class WordBank:
     def get_word(self):
         """Returns random word"""
         return choice(self._words)
+
+    @property
+    def get_all_words(self):
+        return self._words
 
     def verify_word(self, word):
         """
