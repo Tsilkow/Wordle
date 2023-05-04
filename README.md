@@ -13,8 +13,9 @@ After evaluating these algorithms on words_wordle (original wordle word bank) an
 | random | words_wordle | 2261 | 2309 | 97.92% | 3.77 |
 | random | words_tabatkins | 12375 | 14855 | 83.31% | 3.81 |
 | best_letter | words_wordle | 2283 | 2309 | 98.87% | 3.79 |
-| best_letter | words_tabatkins | 12571 | 14855 | 84.62% | 3.86 |
-* -- Average guess count of won games  
+| best_letter | words_tabatkins | 12571 | 14855 | 84.62% | 3.86 |  
+
+\* -- Average guess count of won games  
   
 ## How to run
 ```bash
