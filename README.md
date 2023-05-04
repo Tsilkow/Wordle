@@ -4,9 +4,10 @@ Implementation of [NYT word game](https://www.nytimes.com/games/wordle/index.htm
 ## Results
 Algorithms used for solving:  
 * random -- choose randomly any feasible word  
-* best_letter -- choose feasible word with the most untried letters  
-Note: feasible word is a word that exists in a word bank and could be the solution based on known letter status.
-After evaluating these algorithms on words_wordle (original wordle word bank) and words_tabatkins ([tabatkins' word bank](https://github.com/tabatkins/wordle-list)), following results were achieved:
+* best_letter -- choose feasible word with the most untried letters
+
+Note: feasible word is a word that exists in a word bank and could be the solution based on known letter status.  
+After evaluating these algorithms on words_wordle (original wordle word bank) and words_tabatkins ([tabatkins' word bank](https://github.com/tabatkins/wordle-list)), following results were achieved:  
 | Algorithm | Word Bank | Wins | Games | Win rate | Avg. Score* |
 |:---|:---|:---:|:---:|:---:|:---:|
 | random | words_wordle | 2261 | 2309 | 97.92% | 3.77 |
