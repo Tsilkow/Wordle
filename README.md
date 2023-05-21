@@ -10,8 +10,8 @@ Note: feasible word is a word that exists in a word bank and could be the soluti
 After evaluating these algorithms on words_wordle (original wordle word bank) and words_tabatkins ([tabatkins' word bank](https://github.com/tabatkins/wordle-list)), following results were achieved:  
 | Algorithm | Word Bank | Wins | Games | Win rate | Avg. Score* |
 |:---|:---|:---:|:---:|:---:|:---:|
-| random | words_wordle | 2261 | 2309 | 97.92% | 3.77 |
-| random | words_tabatkins | 12375 | 14855 | 83.31% | 3.81 |
+| random | words_wordle | 2265 | 2309 | 98.09% | 3.78 |
+| random | words_tabatkins | 12453 | 14855 | 83.83% | 3.84 |
 | best_letter | words_wordle | 2283 | 2309 | 98.87% | 3.79 |
 | best_letter | words_tabatkins | 12571 | 14855 | 84.62% | 3.86 |  
 

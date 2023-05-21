@@ -1,5 +1,6 @@
 import string
 import argparse
+from copy import copy
 from enum import Enum
 from tqdm import tqdm
 from colorama import Fore, Back, Style
@@ -51,20 +52,32 @@ class Game:
         Follows this intepretation of letter scores:
         * Correct: letter is correct and in the same position as the original word
         * Elsewhere: letter is correct but is at different position in solution
+            (and not marked correct)
         * Absent: letter is not present in solution
 
         :word: word to be scored
         """
         result = []
-        #print(word)
-        for sl, gl in zip(self._solution, word):
-            if sl == gl:
+        solution_letters_left = list(self._solution)
+        for sletter, gletter in zip(self._solution, word):
+            if sletter == gletter:
                 result.append(LetterStatus.Correct)
+                solution_letters_left.remove(sletter)
                 continue
-            if gl in self._solution:
+            if gletter in self._solution:
                 result.append(LetterStatus.Elsewhere)
             else:
                 result.append(LetterStatus.Absent)
+
+        # Handle repeating letters
+        if len(set(word)) < len(word):
+            for i, letter in enumerate(word):
+                if result[i] == LetterStatus.Elsewhere:
+                    if letter not in solution_letters_left:
+                        result[i] = LetterStatus.Absent
+                    else:
+                        solution_letters_left.remove(letter)
+
         return result
 
     def _process_guess(self, guess):
@@ -123,7 +136,7 @@ def evaluate_against_words(word_bank, player, player_name):
             win_count += 1
             score_total += score
         games_count += 1
-    print(f'{player_name} out of {games_count} games won {win_count} ({win_count/games_count*100:.2f}%) with average {score_total/games_count:.2f} guesses.')
+    print(f'Player {player_name} has won {win_count} games out of {games_count} ({win_count/games_count*100:.2f}%) with average of {score_total/games_count:.2f} guesses.')
     return win_count, games_count, score_total
 
 if __name__ == '__main__':

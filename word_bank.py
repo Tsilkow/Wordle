@@ -43,18 +43,26 @@ class WordBank:
         """
         if candidates is None: candidates = self._words
         result = []
+        letters_present = set()
         positive_regexs = []
         negative_regexs = []
         tmp = '.....'
         for i, (l, s) in enumerate(zip(word, letters_status)):
             if s == LetterStatus.Correct:
                 positive_regexs.append(tmp[:i] + l + tmp[i+1:])
+                letters_present.add(l)
             elif s == LetterStatus.Elsewhere:
                 positive_regexs.append(l)
                 negative_regexs.append(tmp[:i] + l + tmp[i+1:])
-            elif s == LetterStatus.Absent:
-                negative_regexs.append(l)
-        
+                letters_present.add(l)
+                
+        for i, (l, s) in enumerate(zip(word, letters_status)):
+            if s == LetterStatus.Absent:
+                if l in letters_present:
+                    negative_regexs.append(tmp[:i] + l + tmp[i+1:])
+                else:
+                    negative_regexs.append(l)
+
         for w in candidates:
             allowed_word = True
             for r in positive_regexs:
